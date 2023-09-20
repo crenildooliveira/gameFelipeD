@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuadradoAndador</title>
+
+    <style>
+        * {
+            padding:0;
+            margin:0;
+            border:0;
+        }
+
+        #tela {
+            border: 20px solid rgb(5, 0, 46);
+            background-color: cornsilk;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges;
+            width: 800px;
+            height: 800px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="tela" width="40" height="40"></canvas>
+    
+    <!--<script src="cliente.js"></script>-->
+    <script>
+
+        const tela = document.getElementById("tela");
+                const context = tela.getContext("2d");
+                const currentPlayerId = "player1";
+
+                const game = {
+                    players: {
+                        "player1": {x:1, y:1},
+                        "player2": {x:9, y:9}
+                    },
+                    frutas:{
+                        "fruta1": {x:3, y:1}
+                    }
+                }
+
+                function createGame(){
+                    function movePlayer(command){
+                        console.log(`Moving ${command.playerId} with ${command.keyPressed}`)
+                    }
+
+                    return{
+                        movePlayer
+                    }
+                }
+
+                document.addEventListener("keydown", handleKeydown)
+
+                function handleKeydown(event) {
+                    const keyPressed = event.key;
+                    const player = game.players[currentPlayerId]
+
+                    if(keyPressed === "w" && player.y > 0){
+                        //console.log("Up")
+                        //return
+                        player.y = player.y - 1;
+                        return
+                    }
+
+                    if(keyPressed === "a" && player.x > 0){
+                        //console.log("Left")
+                        //return
+                        player.x = player.x - 1;
+                        return
+                    }
+
+                    if(keyPressed === "s" && player.y + 1 < tela.height){
+                        //console.log("Down")
+                        //return
+                        player.y = player.y + 1;
+                        return
+                    }
+
+                    if(keyPressed === "d" && player.x + 1 < tela.width){
+                        //console.log("Right")
+                        //return
+                        player.x = player.x + 1;
+                        return
+                    }
+                }
+
+                renderScreen()
+
+                function renderScreen() {
+
+                    context.fillStyle = "cornsilk"
+                    context.clearRect(0, 0, 40, 40)
+
+                    for (const playerId in game.players) {
+                        const player = game.players[playerId]
+                        context.fillStyle = "black"
+                        context.fillRect(player.x, player.y, 1, 1)
+                    }
+
+                    for (const frutaId in game.frutas) {
+                        const fruta = game.frutas[frutaId]
+                        context.fillStyle = "green"
+                        context.fillRect(fruta.x, fruta.y, 1, 1)
+                    }
+
+                    requestAnimationFrame(renderScreen)
+                }
+
+    </script>
+</body>
+</html>
